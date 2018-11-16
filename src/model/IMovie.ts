@@ -6,8 +6,8 @@ have to release his alter-ego \"Venom\" to save his life.","release_date":"2018-
 /*image:https://image.tmdb.org/t/p/w600_and_h900_bestv2/2uNW4WbgBXL25BAbXGLnLqX71Sw.jpg*/
 
 interface IMovie {
-    id : number,
-    title : String,
+    id ?: number,
+    title ?: String,
     poster_path : String
 }
 
