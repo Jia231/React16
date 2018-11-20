@@ -4,6 +4,7 @@ import * as React from 'react';
 import IMovie, { IResponse } from '../model/IMovie';
 import {getMovies} from '../api/api';
 import SelectedMovie from './SelectedMovie';
+import {MyContextConsumer,defaultValue,MyContext} from './Context';
 
 
 interface IState  {
@@ -12,33 +13,31 @@ interface IState  {
     isLoading ?: boolean
 }
 
-
 class App extends React.Component<{},IState>{
     constructor(props){
         super(props)
-        this.state = {
-            popularMovies : [],
-            selectedMovie : null,
-            isLoading:false
-        }
+        this.state = defaultValue
         this.selectMovie = this.selectMovie.bind(this)
         this.changeLoadingState = this.changeLoadingState.bind(this)
         this.addErrorObjectToState = this.addErrorObjectToState.bind(this)
     }
     componentDidMount(){
-        getMovies().then(response=>{this.setState({popularMovies : response.results,selectedMovie:response.results[0]})})
+        this.context.addPopularMoviesToState()
+        //console.log('this is in the component did mount',this.context.popularMovies)
+        //console.log(this.context.popularMovies)
+        
+        /*getMovies().then(response=>{this.setState({popularMovies : 
+            response.results,selectedMovie:response.results[0]})})*/
+            
         
     }
 
     selectMovie(movieId : number){
-        let selectedMov = this.state.popularMovies.find(mov=>mov.id==movieId)
-        this.setState({
-            ...this.state,selectedMovie:selectedMov,isLoading:true
-        })
+        this.context.selectMovie(movieId)
     }
 
     displayMovies(){
-        const {popularMovies} = this.state;
+        const {popularMovies} = this.context;
         const myUl = {
             float:"left",
             width : "50%"
@@ -58,9 +57,8 @@ class App extends React.Component<{},IState>{
             <>
                 <ul style={myUl}>{movies}</ul>
                 <SelectedMovie changeLoading={this.changeLoadingState} 
-                myStyle={selectedMovieStyle} activeMovie={this.state.selectedMovie} 
-                isLoading={this.state.isLoading} />
-                <button onClick={()=>this.addErrorObjectToState()}>Add Error to State</button>
+                myStyle={selectedMovieStyle} activeMovie={this.context.selectedMovie} 
+                isLoading={this.context.isLoading} />
             </>)
 
         }else{
@@ -75,17 +73,31 @@ class App extends React.Component<{},IState>{
         })
     }
     changeLoadingState(newLoadingValue){
-        this.setState({
-            ...this.state,isLoading:newLoadingValue
-        })
+        this.context.changeLoading(newLoadingValue)
     }
     render(){
-        console.log('state of app',this.state)
-        return <React.Fragment>{this.displayMovies()}</React.Fragment>
+
+        return (<React.Fragment>
+                    <MyContextConsumer>
+                        {
+                            context=>{
+                                return <>{this.displayMovies()}</>
+                            }
+                        }
+                    </MyContextConsumer>
+                </React.Fragment>)
     }
 
 }
-
+App.contextType = MyContext
 export default App;
 
 
+
+
+
+/*<ul style={myUl}>{movies}</ul>
+                <SelectedMovie changeLoading={this.changeLoadingState} 
+                myStyle={selectedMovieStyle} activeMovie={this.state.selectedMovie} 
+                isLoading={this.state.isLoading} />
+                <button onClick={()=>this.addErrorObjectToState()}>Add Error to State</button>*/
