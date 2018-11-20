@@ -20,9 +20,14 @@ class MyProvider extends React.Component<{},IContext>{
     }
 
     selectMovie = (movieId) =>{
-        console.log('this is the movie selected',movieId)
+        //console.log('this is the movie selected',movieId)
         let selectedMov = this.state.popularMovies.find(mov=>mov.id==movieId)
-        this.setState({selectedMovie:selectedMov,isLoading:true})
+        if(this.state.hasOwnProperty('selectedMovie')){
+            if(movieId!=this.state.selectedMovie.id){
+                this.setState({selectedMovie:selectedMov,isLoading:true})
+            }
+        }
+
     }
 
     addPopularMoviesToState = () => {
@@ -37,6 +42,20 @@ class MyProvider extends React.Component<{},IContext>{
                     selectedMovie:response.results[0]
                 })
         }})
+    }
+
+    shouldComponentUpdate(nextProps,nexState){
+        if(nextProps.hasOwnProperty('selectedMovie')){
+            if(nextProps.selectedMovie.id==nextProps.selectedMovie.id){
+                return null
+            }
+            else {
+                return true;
+            }
+        }
+        else{
+            return true;
+        }
     }
 
     render(){

@@ -5,7 +5,7 @@ import IMovie, { IResponse } from '../model/IMovie';
 import {getMovies} from '../api/api';
 import SelectedMovie from './SelectedMovie';
 import {MyContextConsumer,defaultValue,MyContext} from './Context';
-
+import '../../public/CSS/app.css';
 
 interface IState  {
     popularMovies : IMovie[],
@@ -22,14 +22,7 @@ class App extends React.Component<{},IState>{
         this.addErrorObjectToState = this.addErrorObjectToState.bind(this)
     }
     componentDidMount(){
-        this.context.addPopularMoviesToState()
-        //console.log('this is in the component did mount',this.context.popularMovies)
-        //console.log(this.context.popularMovies)
-        
-        /*getMovies().then(response=>{this.setState({popularMovies : 
-            response.results,selectedMovie:response.results[0]})})*/
-            
-        
+        this.context.addPopularMoviesToState()       
     }
 
     selectMovie(movieId : number){
@@ -91,13 +84,3 @@ class App extends React.Component<{},IState>{
 }
 App.contextType = MyContext
 export default App;
-
-
-
-
-
-/*<ul style={myUl}>{movies}</ul>
-                <SelectedMovie changeLoading={this.changeLoadingState} 
-                myStyle={selectedMovieStyle} activeMovie={this.state.selectedMovie} 
-                isLoading={this.state.isLoading} />
-                <button onClick={()=>this.addErrorObjectToState()}>Add Error to State</button>*/
