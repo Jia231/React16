@@ -3,7 +3,8 @@
 import * as React from 'react';
 import IMovie, { IResponse } from '../model/IMovie';
 import {getMovies} from '../api/api';
-import SelectedMovie from './SelectedMovie';
+//import SelectedMovie from './SelectedMovie';
+import SelectedMovieWithHook from './SelectedMovie'
 import {MyContextConsumer,defaultValue,MyContext} from './Context';
 import '../../public/CSS/app.css';
 
@@ -49,9 +50,8 @@ class App extends React.Component<{},IState>{
             return (
             <>
                 <ul style={myUl}>{movies}</ul>
-                <SelectedMovie changeLoading={this.changeLoadingState} 
-                myStyle={selectedMovieStyle} activeMovie={this.context.selectedMovie} 
-                isLoading={this.context.isLoading} />
+                <SelectedMovieWithHook myStyle={selectedMovieStyle} />
+
             </>)
 
         }else{
@@ -84,3 +84,6 @@ class App extends React.Component<{},IState>{
 }
 App.contextType = MyContext
 export default App;
+/*<SelectedMovie changeLoading={this.changeLoadingState} 
+                myStyle={selectedMovieStyle} activeMovie={this.context.selectedMovie} 
+                isLoading={this.context.isLoading} />*/
